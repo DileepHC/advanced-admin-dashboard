@@ -1,0 +1,76 @@
+/* src/index.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Your existing @import for react-pro-sidebar/dist/styles/scss/styles.scss */
+
+/* Global styles */
+html,
+body,
+#root,
+.app,
+.content {
+  height: 100%;
+  width: 100%;
+  font-family: 'Poppins', sans-serif; /* Set Poppins as the default */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  /* Add other global styles from your 'farmer.css' here if they are truly global */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+body {
+    /* Your body background and color will primarily come from theme.js now */
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* ... rest of your index.css or global CSS from 'farmer.css' */
+
+/* Example of how other elements might inherit or be styled */
+.qc-navigation .nav-button {
+    font-family: 'Poppins', sans-serif; /* Ensure explicit font if needed */
+}
+
+h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif; /* Headings also use Poppins */
+}
+
+/* You can remove the separate font-family definitions in your provided CSS if you set it globally here */
+/* For example, in your provided CSS: font-family: 'Poppins', sans-serif; in the universal selector or body */
+
+.app {
+  display: flex;
+  position: relative;
+}
+
+.content {
+  flex-grow: 1; /* Allows content to take up remaining space */
+  overflow-y: auto; /* Enables scrolling for content if it overflows */
+}
+
+/* Scrollbar styles (optional, but good for dark mode) */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #2d3748; /* Darker track for dark mode */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #4a5568; /* Darker thumb for dark mode */
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280; /* Lighter thumb on hover */
+}
