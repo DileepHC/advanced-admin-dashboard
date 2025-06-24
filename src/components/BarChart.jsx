@@ -2,7 +2,7 @@
 import { ResponsiveBar } from "@nivo/bar";
 import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
-import { mockBarData as data } from "../data/mockData"; // Ensure you have this data
+import { mockBarData as data } from "../data/mockData"; // Ensure this import is correct
 
 const BarChart = ({ isDashboard = false }) => {
   const theme = useTheme();
@@ -44,19 +44,23 @@ const BarChart = ({ isDashboard = false }) => {
           },
         },
       }}
-      keys={["hot dog", "burger", "sandwich", "kebab", "fries", "donut"]}
+      // --- CHANGES START HERE ---
+      // Update keys to reflect the new categories in mockBarData
+      keys={["Hot Snacks", "Cold Beverages", "Indian Meals", "Desserts", "Breakfast Items", "Quick Bites"]}
+      // Update indexBy to use 'country' (state abbreviation)
       indexBy="country"
+      // --- CHANGES END HERE ---
       margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
       padding={0.3}
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
-      colors={{ scheme: "nivo" }}
+      colors={{ scheme: "nivo" }} // You can keep 'nivo' or choose another scheme
       defs={[
         {
           id: "dots",
           type: "patternDots",
           background: "inherit",
-          color: "#38bcb2",
+          color: "#38bcb2", // Consider changing to match your theme more closely if desired
           size: 4,
           padding: 1,
           stagger: true,
@@ -65,7 +69,7 @@ const BarChart = ({ isDashboard = false }) => {
           id: "lines",
           type: "patternLines",
           background: "inherit",
-          color: "#eed312",
+          color: "#eed312", // Consider changing to match your theme more closely if desired
           rotation: -45,
           lineWidth: 6,
           spacing: 10,
@@ -74,13 +78,14 @@ const BarChart = ({ isDashboard = false }) => {
       fill={[
         {
           match: {
-            id: "fries",
+            // Updated match IDs to reflect new keys if patterns are still desired
+            id: "Breakfast Items",
           },
           id: "dots",
         },
         {
           match: {
-            id: "sandwich",
+            id: "Indian Meals",
           },
           id: "lines",
         },
@@ -95,7 +100,8 @@ const BarChart = ({ isDashboard = false }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "country", // Changed for example
+        // Update legend for the x-axis to be more descriptive for states
+        legend: isDashboard ? undefined : "Indian States",
         legendPosition: "middle",
         legendOffset: 32,
       }}
@@ -103,7 +109,8 @@ const BarChart = ({ isDashboard = false }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "food", // Changed for example
+        // Update legend for the y-axis to be more descriptive for sales quantity
+        legend: isDashboard ? undefined : "Sales Quantity",
         legendPosition: "middle",
         legendOffset: -40,
       }}
@@ -139,9 +146,9 @@ const BarChart = ({ isDashboard = false }) => {
         },
       ]}
       role="application"
-      ariaLabel="Nivo bar chart demo"
+      ariaLabel="Sales quantity by Indian states" // Updated ariaLabel
       barAriaLabel={(e) =>
-        e.id + ": " + e.formattedValue + " in country: " + e.indexValue
+        e.id + ": " + e.formattedValue + " in state: " + e.indexValue
       }
     />
   );

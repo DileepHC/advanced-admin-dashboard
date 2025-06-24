@@ -2,15 +2,28 @@
 import { ResponsiveLine } from "@nivo/line";
 import { useTheme } from "@mui/material";
 import { tokens } from "../theme";
-import { mockLineData as data } from "../data/mockData"; // Ensure you have this data
+import { mockLineData } from "../data/mockData";
 
-const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
+const LineChart = ({ isCustomLineColors = false, isDashboard = false, timeframe = 'monthly' }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  // Filter data based on the selected timeframe
+  const filteredData = mockLineData.map(series => {
+    let newData = [];
+    if (timeframe === 'daily') {
+      newData = series.data.filter(d => d.x.includes('/Jan')); // Assuming daily data is within a specific month, adjust as needed
+    } else if (timeframe === 'weekly') {
+      newData = series.data.filter(d => d.x.includes('Week'));
+    } else { // 'monthly'
+      newData = series.data.filter(d => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].includes(d.x));
+    }
+    return { ...series, data: newData };
+  });
+
   return (
     <ResponsiveLine
-      data={data}
+      data={filteredData} // Use filteredData here
       theme={{
         axis: {
           domain: {
@@ -44,14 +57,14 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
           },
         },
       }}
-      colors={isCustomLineColors ? { datum: "color" } : { scheme: "nivo" }} // Using Nivo scheme for default
+      colors={isCustomLineColors ? { datum: "color" } : { scheme: "nivo" }}
       margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
       xScale={{ type: "point" }}
       yScale={{
         type: "linear",
         min: "auto",
         max: "auto",
-        stacked: true,
+        stacked: false, // Set to false to show individual line trends
         reverse: false,
       }}
       yFormat=" >-.2f"
@@ -62,7 +75,7 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "transportation", // Changed for example
+        legend: isDashboard ? undefined : "Timeframe", // Updated legend
         legendOffset: 36,
         legendPosition: "middle",
       }}
@@ -70,7 +83,7 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "count", // Changed for example
+        legend: isDashboard ? undefined : "Count", // Updated legend
         legendOffset: -40,
         legendPosition: "middle",
       }}

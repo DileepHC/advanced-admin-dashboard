@@ -1,24 +1,53 @@
 // src/scenes/dashboard/index.jsx
-import React from "react";
-import { Box, Typography, useTheme, Button, IconButton } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Box,
+  Typography,
+  useTheme,
+  Button,
+  IconButton,
+  Select, // Import Select
+  MenuItem, // Import MenuItem
+  FormControl, // Import FormControl for better form control (optional but good practice)
+  InputLabel // Import InputLabel for the select (optional but good practice)
+} from "@mui/material";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import EmailIcon from "@mui/icons-material/Email";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
-import Header from "../../components/Header"; // We'll create this next
-import StatBox from "../../components/StatBox"; // We'll create this next
-import LineChart from "../../components/LineChart"; // We'll create this next
-import BarChart from "../../components/BarChart"; // We'll create this next
-//import PieChart from "../../components/PieChart"; // We'll create this next
-import GeographyChart from "../../components/GeographyChart"; // We'll create this next
-import ProgressCircle from "../../components/ProgressCircle"; // We'll create this next
-import { mockTransactions } from "../../data/mockData"; // Import mock data
+import Header from "../../components/Header";
+import StatBox from "../../components/StatBox";
+import LineChart from "../../components/LineChart";
+import BarChart from "../../components/BarChart";
+//import PieChart from "../../components/PieChart";
+import GeographyChart from "../../components/GeographyChart";
+import ProgressCircle from "../../components/ProgressCircle";
+import { mockTransactions } from "../../data/mockData";
 import { tokens } from "../../theme";
 
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [lineChartTimeframe, setLineChartTimeframe] = useState('monthly'); // State for timeframe
+
+  // Function to handle changes in the dropdown
+  const handleTimeframeChange = (event) => {
+    setLineChartTimeframe(event.target.value);
+  };
+
+  // Example cost based on timeframe (you might have a more dynamic way to calculate this)
+  const getCostForTimeframe = () => {
+    switch (lineChartTimeframe) {
+      case 'daily':
+        return '₹2,000.00';
+      case 'weekly':
+        return '₹12,500.00';
+      case 'monthly':
+      default:
+        return '₹59,342.32';
+    }
+  };
 
   return (
     <Box m="20px">
@@ -143,17 +172,50 @@ const Dashboard = () => {
                 fontWeight="600"
                 color={colors.neutral.light}
               >
-                Monthly Analytics
+                Analytics Over Time
               </Typography>
               <Typography
                 variant="h3"
                 fontWeight="bold"
                 color={colors.secondary.main}
               >
-                $59,342.32
+                {getCostForTimeframe()}
               </Typography>
             </Box>
-            <Box>
+            <Box display="flex" gap="10px" alignItems="center">
+              <FormControl variant="outlined" size="small" sx={{ minWidth: 120 }}>
+                <InputLabel
+                  id="timeframe-select-label"
+                  sx={{ color: colors.neutral.light }}
+                >
+                  Timeframe
+                </InputLabel>
+                <Select
+                  labelId="timeframe-select-label"
+                  value={lineChartTimeframe}
+                  onChange={handleTimeframeChange}
+                  label="Timeframe"
+                  sx={{
+                    color: colors.neutral.light,
+                    '.MuiOutlinedInput-notchedOutline': {
+                      borderColor: colors.secondary.main,
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: colors.secondary.main,
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      borderColor: colors.secondary.main,
+                    },
+                    '.MuiSvgIcon-root': {
+                      color: colors.neutral.light,
+                    },
+                  }}
+                >
+                  <MenuItem value="daily">Daily</MenuItem>
+                  <MenuItem value="weekly">Weekly</MenuItem>
+                  <MenuItem value="monthly">Monthly</MenuItem>
+                </Select>
+              </FormControl>
               <IconButton>
                 <DownloadOutlinedIcon
                   sx={{ fontSize: "26px", color: colors.secondary.main }}
@@ -162,7 +224,7 @@ const Dashboard = () => {
             </Box>
           </Box>
           <Box height="250px" m="-20px 0 0 0">
-            <LineChart isDashboard={true} />
+            <LineChart isDashboard={true} timeframe={lineChartTimeframe} /> {/* Pass timeframe prop */}
           </Box>
         </Box>
         <Box
@@ -215,7 +277,7 @@ const Dashboard = () => {
                 p="5px 10px"
                 borderRadius="4px"
               >
-                ${transaction.cost}
+                ₹{transaction.cost}
               </Box>
             </Box>
           ))}
@@ -244,7 +306,7 @@ const Dashboard = () => {
               color={colors.secondary.main}
               sx={{ mt: "15px" }}
             >
-              $48,352 revenue generated
+              ₹48,352 revenue generated
             </Typography>
             <Typography color={colors.neutral.dark}>
               Includes extra expenditures and
